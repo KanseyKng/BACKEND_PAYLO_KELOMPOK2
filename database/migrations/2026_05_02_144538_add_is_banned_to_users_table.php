@@ -13,13 +13,9 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->string('no_hp', 15)->unique()->after('email')->nullable();
-            $table->text('alamat')->after('no_hp')->nullable();
-            $table->enum('role', ['pelanggan/turis', 'super_admin'])->default('pelanggan/turis')->after('alamat');
-            $table->string('pin')->after('role');
-            $table->timestamp('tanggal_daftar')->useCurrent()->after('pin');
-        });
+            $table->enum('status', ['active', 'banned'])->default('active')->after('pin');
         
+        });
     }
 
     /**

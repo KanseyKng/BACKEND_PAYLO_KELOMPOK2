@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('kategori_produk', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id('id_kategori');
             $table->enum('nama_kategori', ['Makanan Khas', 'Kerajinan']);
             $table->timestamps();

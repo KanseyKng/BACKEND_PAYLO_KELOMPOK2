@@ -15,7 +15,38 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasApiTokens ;
+
+    protected $primaryKey = 'id_user';
+    protected $fillable = [ 
+        'nama', 'email', 'password', 'no_hp', 'alamat', 'role', 'pin', 'status', 'tanggal_daftar',
+    ];
+
+    protected $hidden = [
+        'password', 'pin', 'remember_token',
+    ];
+
+    protected $casts = [
+        'tanggal_daftar' => 'datetime',
+    ];
+
+    public function saldo() {
+        return $this->hasOne(Saldo::class, 'id_user', 'id_user');
+    }
+
+    public function qris() {
+         return $this->hasOne(Qris::class, 'id_user', 'id_user');
+    }
+
+    public function transaksi() {
+        return $this->hasMany(Transaksi::class, 'id_user', 'id_user');
+    }
+
+    public function cashflow() {
+        return $this->hasMany(Cashflow::class, 'id_user', 'id_user');
+    }
+
+
 
     /**
      * Get the attributes that should be cast.

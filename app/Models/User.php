@@ -19,11 +19,11 @@ class User extends Authenticatable
 
     protected $primaryKey = 'id_user';
     protected $fillable = [ 
-        'nama', 'email', 'password', 'no_hp', 'alamat', 'role', 'pin', 'status', 'tanggal_daftar',
+        'nama', 'email', 'password', 'no_hp', 'alamat', 'role', 'pin', 'status', 'otp','otp_expiry','tanggal_daftar',
     ];
 
     protected $hidden = [
-        'password', 'pin', 'remember_token',
+        'password', 'pin', 'otp', 'remember_token',
     ];
 
     protected $casts = [

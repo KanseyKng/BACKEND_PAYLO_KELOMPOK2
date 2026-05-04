@@ -42,29 +42,6 @@ class QrisController extends Controller
             return response()->json(['message' => 'Saldo tidak mencukupi.'], 400);
         }
 
-        //cek apakah itu qr milik UMkm
-        $umkm = UMKM::where('kode_qr', $request->kode_qr)->first();
-        if ($umkm) {
-            $saldo->jumlah_saldo -= $request->jumlah;
-            $saldo->save();
-
-            Transaksi::create([
-                'id_user'         => $user->id_user,
-                'jenis_transaksi' => 'Pembayaran',
-                'jumlah'          => $request->jumlah,
-                'status'          => 'berhasil',
-                'tanggal'         => now(),
-            ]);
-            Cashflow::create([
-                'id_user'  => $user->id_user,
-                'jenis'    => 'Pengeluaran',
-                'kategori' => 'QRIS',
-                'jumlah'   => $request->jumlah,
-                'tanggal_dibuat' => now(),
-            ]);
-            return response()->json(['message' => 'Pembayaran QRIS berhasil', 'saldo' => $saldo->jumlah_saldo]);
-        }
-
         //jika bukan milih UMKM cek di qr pelanggan/turis
         $qris = Qris::where('kode_qr', $request->kode_qr)->first();
         if (!$qris) {
@@ -76,6 +53,7 @@ class QrisController extends Controller
             return response()->json(['message' => 'Tidak bisa scan QR sendiri.'], 400);
         }
 
+        //proses 
         $saldo->jumlah_saldo -= $request->jumlah;
         $saldo->save();
 

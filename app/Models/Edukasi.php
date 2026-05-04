@@ -14,6 +14,7 @@ class Edukasi extends Model
         'isi_edukasi',
         'tanggal_dibuat',
     ];
+    public $timestamps = false;
 
     protected $casts = ['tanggal_dibuat' => 'datetime',];
 

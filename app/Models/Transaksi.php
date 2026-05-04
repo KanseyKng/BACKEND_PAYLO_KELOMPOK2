@@ -22,9 +22,4 @@ class Transaksi extends Model
         return $this->belongsTo(User::class, 'id_penerima', 'id_user');
     }
     
-
-
-
-
-
 }

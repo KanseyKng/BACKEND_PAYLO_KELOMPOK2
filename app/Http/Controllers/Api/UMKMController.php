@@ -25,7 +25,6 @@ class UMKMController extends Controller
             'no_hp' => 'required|string|max:15',
             'deskripsi' => 'nullable|string',
             'link_lokasi_umkm' => 'nullable|url',
-            'kode_qr' => 'required|string|unique:umkm,kode_qr',
             'rating' => 'nullable|in:1,2,3,4,5',
         ]);
         $umkm = UMKM::create($request->all());
@@ -41,10 +40,9 @@ class UMKMController extends Controller
             'no_hp' => 'sometimes|string|max:15',
             'deskripsi' => 'nullable|string',
             'link_lokasi_umkm' => 'nullable|url',
-            'kode_qr' => 'sometimes|string|unique:umkm,kode_qr,'.$umkm->id_umkm.',id_umkm',
             'rating' => 'nullable|in:1,2,3,4,5',
         ]);
-        $umkm->update($request->only(['nama_umkm','alamat','no_hp','deskripsi','link_lokasi_umkm','kode_qr','rating']));
+        $umkm->update($request->only(['nama_umkm','alamat','no_hp','deskripsi','link_lokasi_umkm','rating']));
         return response()->json(['message' => 'UMKM berhasil diperbarui.', 'data' => $umkm]);
     }
 

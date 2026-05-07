@@ -76,4 +76,14 @@ class QrisController extends Controller
 
         return response()->json(['message' => 'Pembayaran QRIS berhasil (transfer)', 'saldo' => $saldo->jumlah_saldo]);
     }
+    public function info($kode){
+    $qris = Qris::with('user:id_user,nama,no_hp')->where('kode_qr', $kode)->first();
+    if (!$qris) {
+        return response()->json(['message' => 'QR tidak valid.'], 404);
+    }
+    return response()->json([
+        'nama' => $qris->user->nama,
+        'no_hp' => $qris->user->no_hp,
+    ]);
+}
 }

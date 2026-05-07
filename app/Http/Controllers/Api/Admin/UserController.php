@@ -48,6 +48,20 @@ class UserController extends Controller
         $user->update($request->only(['nama','email','no_hp','status']));
         return response()->json(['message' => 'Data user berhasil diperbarui.', 'user' => $user]);
     }
+    public function show($id)
+{
+    $user = User::findOrFail($id);
+    
+    return response()->json([
+        'id_user' => $user->id_user,
+        'nama'    => $user->nama,
+        'email'   => $user->email,
+        'no_hp'   => $user->no_hp,
+        'alamat'  => $user->alamat,
+        'role'    => $user->role,
+        'status'  => $user->status,
+    ]);
+}
 
     public function destroy($id)
     {

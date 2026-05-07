@@ -46,7 +46,7 @@ class SaldoController extends Controller
         Cashflow::create([
             'id_user'        => $user->id_user,
             'jenis'          => 'Pemasukan',
-            'kategori'       => 'Top-Up',
+            'kategori'       => 'TopUp',
             'jumlah'         => $request->jumlah,
             'tanggal_dibuat' => now(),
         ]);

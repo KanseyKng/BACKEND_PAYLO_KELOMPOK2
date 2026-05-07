@@ -28,6 +28,7 @@ Route::middleware(['auth:sanctum', 'banned'])->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/set-pin', [AuthController::class, 'setPin']);
+    Route::get('/qris/{kode}/info', [QrisController::class, 'info']);
 
     //User
     Route::get('/user', [UserController::class, 'show']);
@@ -66,7 +67,7 @@ Route::middleware(['auth:sanctum', 'banned', 'role:super_admin'])->prefix('admin
     Route::get('/dashboard', [AdminDashboardController::class, 'index']);
 
     //kelola user
-    Route::apiResource('users', AdminUserController::class)->except(['show']);
+    Route::apiResource('users', AdminUserController::class)->only(['index', 'store', 'update', 'destroy', 'show']);
 
     //monitoring transaksi
     Route::get('transaksi', [AdminTransaksiController::class, 'index']);

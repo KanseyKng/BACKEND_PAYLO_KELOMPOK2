@@ -35,21 +35,22 @@ class DataDummySeeder extends Seeder
         ]);
 
         // Ambil user Budi
-$budi = User::where('email', 'budi@mail.com')->first();
+$budi = \App\Models\User::where('email', 'budi@mail.com')->first();
 
-Cashflow::create([
+\App\Models\Cashflow::create([
     'id_user' => $budi->id_user,
-    'jenis' => 'Pemasukan',
-    'kategori' => 'Top-Up',
-    'jumlah' => 100000,
-    'tanggal_dibuat' => Carbon::now()->subDays(2),
+    'jenis'   => 'Pemasukan',
+    'kategori'=> 'TopUp',                
+    'jumlah'  => 100000,
+    'tanggal_dibuat' => now()->subDays(2),
 ]);
-Cashflow::create([
+
+\App\Models\Cashflow::create([
     'id_user' => $budi->id_user,
-    'jenis' => 'Pengeluaran',
-    'kategori' => 'Transfer Keluar',
-    'jumlah' => 30000,
-    'tanggal_dibuat' => Carbon::now()->subDay(),
+    'jenis'   => 'Pengeluaran',
+    'kategori'=> 'Transfer Keluar',
+    'jumlah'  => 30000,
+    'tanggal_dibuat' => now()->subDay(),
 ]);
 
 

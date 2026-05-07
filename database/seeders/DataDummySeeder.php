@@ -3,6 +3,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use App\Models\Cashflow;
+use Carbon\Carbon;
 use App\Models\Saldo;
 use App\Models\KategoriProduk;
 use App\Models\UMKM;
@@ -31,6 +33,27 @@ class DataDummySeeder extends Seeder
             'nama' => 'Budi', 'email' => 'budi@mail.com', 'password' => Hash::make('password'),
             'no_hp' => '08123456789', 'role' => 'pelanggan/turis', 'status' => 'active', 'pin' => Hash::make('123456')
         ]);
+
+        // Ambil user Budi
+$budi = User::where('email', 'budi@mail.com')->first();
+
+Cashflow::create([
+    'id_user' => $budi->id_user,
+    'jenis' => 'Pemasukan',
+    'kategori' => 'Top-Up',
+    'jumlah' => 100000,
+    'tanggal_dibuat' => Carbon::now()->subDays(2),
+]);
+Cashflow::create([
+    'id_user' => $budi->id_user,
+    'jenis' => 'Pengeluaran',
+    'kategori' => 'Transfer Keluar',
+    'jumlah' => 30000,
+    'tanggal_dibuat' => Carbon::now()->subDay(),
+]);
+
+
+
         Saldo::create(['id_user' => $budi->id_user, 'jumlah_saldo' => 100000]);
 
         // UMKM Makanan

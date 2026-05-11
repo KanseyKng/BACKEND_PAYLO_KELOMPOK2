@@ -7,6 +7,8 @@ use App\Models\Saldo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use App\Mail\OtpMail;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -90,22 +92,22 @@ class AuthController extends Controller
     }
 
     //ketika user lupa password (kirim otp)
-    public function forgotPassword(Request $request)
-    {
-        $request->validate(['email' => 'required|email|exists:users,email']);
-        $user = User::where('email', $request->email)->first();
+   public function forgotPassword(Request $request)
+{
+    $request->validate(['email' => 'required|email|exists:users,email']);
+    $user = User::where('email', $request->email)->first();
 
-        $otp = rand(100000, 999999);
-        $user->update([
-            'otp'        => Hash::make($otp),
-            'otp_expiry' => Carbon::now()->addMinutes(5),
-        ]);
+    $otp = rand(100000, 999999);
+    $user->update([
+        'otp'        => Hash::make($otp),
+        'otp_expiry' => Carbon::now()->addMinutes(5),
+    ]);
 
-        //otp di kirim lewat email
-        \Log::info("OTP untuk {$user->email}: {$otp}");
+    // KIRIM EMAIL S UNGGUHAN, BUKAN LOG
+    Mail::to($user->email)->send(new OtpMail($otp));
 
-        return response()->json(['message' => 'OTP telah dikirim ke email Anda.']);
-    }
+    return response()->json(['message' => 'OTP telah dikirim ke email Anda.']);
+}
 
     //ketika user ingin reset password (butuh otp)
     public function resetPassword(Request $request)
@@ -140,12 +142,15 @@ class AuthController extends Controller
 
     //kirim ulan otp
     public function resendOtp(Request $request)
-    {
-        $request->validate(['email' => 'required|email|exists:users,email']);
-        $user = User::where('email', $request->email)->first();
-        $otp = rand(100000, 999999);
-        $user->update(['otp' => Hash::make($otp), 'otp_expiry' => Carbon::now()->addMinutes(5)]);
-        \Log::info("OTP ulang untuk {$user->email}: {$otp}");
-        return response()->json(['message' => 'OTP baru telah dikirim.']);
-    }
+{
+    $request->validate(['email' => 'required|email|exists:users,email']);
+    $user = User::where('email', $request->email)->first();
+    $otp = rand(100000, 999999);
+    $user->update(['otp' => Hash::make($otp), 'otp_expiry' => Carbon::now()->addMinutes(5)]);
+
+    // KIRIM EMAIL S UNGGUHAN
+    Mail::to($user->email)->send(new OtpMail($otp));
+
+    return response()->json(['message' => 'OTP baru telah dikirim.']);
+}
 }

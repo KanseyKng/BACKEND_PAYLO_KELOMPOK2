@@ -5,6 +5,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use App\Mail\OtpMail;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -37,13 +39,16 @@ class UserController extends Controller
     //mengirim otp ke email user utnuk ubah password/pin
     //buat kode, hash, simpan waktu exp, kasih respon
     public function sendOtpForSensitive(Request $request)
-    {
-        $user = $request->user();
-        $otp = rand(100000, 999999);
-        $user->update(['otp' => Hash::make($otp), 'otp_expiry' => Carbon::now()->addMinutes(5)]);
-        \Log::info("OTP untuk {$user->email}: {$otp}");
-        return response()->json(['message' => 'OTP dikirim ke email Anda.']);
-    }
+{
+    $user = $request->user();
+    $otp = rand(100000, 999999);
+    $user->update(['otp' => Hash::make($otp), 'otp_expiry' => Carbon::now()->addMinutes(5)]);
+
+    // KIRIM EMAIL S UNGGUHAN
+    Mail::to($user->email)->send(new OtpMail($otp));
+
+    return response()->json(['message' => 'OTP dikirim ke email Anda.']);
+}
 
     //mengubah pw setelah otp terverifikasi
     public function changePassword(Request $request)
